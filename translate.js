@@ -15,17 +15,10 @@ const write = async (path, content) => {
   return writeFile(path, JSON.stringify(content, null, 2), 'utf8')
 }
 
-// AWS.config.region = process.env.REGION || 'us-east-1'
+AWS.config.region = process.env.AWS_REGION || 'us-east-1'
+AWS.config.credentials = new AWS.Credentials(process.env.AWS_ACCESS_KEY_ID, process.env.AWS_SECRET_ACCESS_KEY);
 
-const config = {
-  apiVersion: '2017-11-29',
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  accessSecretKey: process.env.AWS_SECRET_ACCESS_KEY,
-  region: process.env.AWS_REGION || 'us-east-1',
-}
-AWS.config.update(config)
-
-const translate = new AWS.Translate(config)
+const translate = new AWS.Translate()
 
 async function main() {
   const files = await readdir(`locales/${defaultLanguage}`)
